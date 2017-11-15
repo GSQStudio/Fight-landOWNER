@@ -1,1 +1,124 @@
+//扑克牌游戏,
+//1.定义3个人,54张牌,每个人18张牌,
+//2.倍数,抢地主
+//牌怎么打出和显示
+//3.开始打架(判断胜利的条件)(牌的选择打出)
+//4.建立聊天系统
+//5.积分系统
+//5.用户建立
+//
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+
+int i,n,y,j,c,n1;                                              //用于for循环...
+int num,numc,depend=0;                                          //用于存储中间值
+int randdecide,randdecide1,rank1;
+
+int hand[3][17];                         //分到玩家手上的牌
+
+//改变思路,将花色与数字分开.
+
+char number[14]={"23456789TJQKA"};
+
+int count1[55];                                                //用于判断是否已赋值的变量
+
+void card_depend(int n )
+{
+    if(n<14&&n>=1)
+    {
+        printf("红桃%d ",n);
+    }
+    else if(n>=14&&n<27)
+    {
+        printf("方块%d ",n-13);
+    }
+    else if(n>=27&&n<40)
+    {
+        printf("梅花%d ",n-26);
+    }
+    else if(n>=40&&n<53)
+    {
+        printf("黑桃%d ",n-39);
+    }
+    else if(n==53)
+        printf("小王 ");
+    else if(n==54)
+        printf("大王 ");
+}
+
+void fish_and_handin()
+{
+    for(i=1;i<55;i++)
+        count1[i]=1;                                                                            //1代表还未赋值,0代表已赋值过了
+        randdecide=rand()%54;
+        randdecide1=rand()%54;
+        if(randdecide==randdecide1&&randdecide==0)                         //特殊条件,不能让randdecide与randdecide1相同.
+        randdecide1++;
+        if(randdecide==randdecide1&&randdecide==53)
+            randdecide1--;
+
+
+
+    //为玩家发牌,因为有三个玩家,所以双层循环
+    for(n=0;n<3;n++)
+        for(i=0;i<17;i++)
+    {
+        rank1++;
+        for(;;)
+        {
+            if(rank1==(randdecide+1))
+            {
+                hand[n][i]=53;
+                count1[53]=0;
+                break;
+            }
+            if(rank1==(randdecide1+1))
+            {
+                hand[n][i]=54;
+                count1[54]=0;
+                break;
+            }
+
+
+            num=rand()%14;                                           //1-13
+            if(num==0)
+                num=1;
+            numc=rand()%4;                                            //0-3
+            c=num+numc*13;                                                //每张牌对应的ID号
+            if(count1[c]!=0)
+                {
+                    hand[n][i]=c;                                                   //将每张牌的ID号一一对应给hand[n][i],但还缺2张大王
+                    count1[c]=0;                                                      //表示这张牌已抽过了
+                    break;
+
+                }
+        }
+
+
+    }
+
+
+     for(n=0;n<3;n++)
+        {
+            printf("PLAYER %d's cards ",n+1);
+            for(i=0;i<17;i++)
+            {
+                n1=hand[n][i];                                                    //n1是只有在这里用用到的中间变量
+                card_depend(n1);
+            }
+            printf("\n");
+        }
+
+}
+
+
+
+
+int main()
+{
+    srand((int)time(0));
+    fish_and_handin();
+    return 0;
+}
 
